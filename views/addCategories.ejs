@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Category</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+  
+</head>
+<body>
+  <h1>Add Category</h1>
+  <form id="categoryForm">
+    <label for="categoryName">Category Name:</label>
+    <input type="text" id="categoryName" name="categoryName" required>
+
+    <button type="submit">Add Category</button>
+  </form>
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#categoryForm').submit(function(event) {
+        event.preventDefault();
+
+        var categoryName = $('#categoryName').val();
+
+        $.ajax({
+          url: 'http://localhost:3000/api/categories', // Replace with your API endpoint
+          method: 'POST',
+          dataType: 'json',
+          data: {
+            nom: categoryName
+          },
+          success: function(response) {
+            alert('cotegory'+categoryName+' added successfully');
+            console.log(response);
+            window.location.reload();
+            // Handle success response here
+          },
+          error: function(error) {
+            console.log(error);
+            // Handle error response here
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

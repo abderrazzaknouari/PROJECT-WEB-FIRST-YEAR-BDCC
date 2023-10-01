@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Comments</title>
+    <style>
+        .comment {
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .comment .id {
+            font-weight: bold;
+        }
+
+        .comment .email {
+            color: #666;
+        }
+
+        .comment .content {
+            margin-top: 5px;
+        }
+
+        .comment .article-id {
+            color: blue;
+            cursor: pointer;
+        }
+
+        .btn {
+            /* Common button styles */
+
+            display: inline-block;
+            padding: 0.5em 1em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .btn-primary {
+            /* Primary button styles */
+            background-color: #869eb7;
+            margin-top: 20px;
+        }
+
+        .btn-secondary {
+            background-color: #374757;
+        }
+
+        /* Additional styles for hover and focus states */
+        .btn:hover {
+            opacity: 0.5;
+        }
+
+        .btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #485f77;
+        }
+
+
+
+        .message {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .element {
+            display: inline-block;
+            box-sizing: border-box;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        let id;
+        let emailUser;
+        let idUser;
+        let role;
+        $(document).ready(function () {
+            function getURLParameter(name) {
+                var urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            }
+
+            // Example usage: get the value of 'id' parameter from the URL
+            id = getURLParameter('idArticle');
+
+            ;
+            $.ajax({
+                url: 'http://localhost:3000/api/profil',
+                method: 'GET',
+                dataType: 'json',
+
+                success: function (response) {
+                    console.log("response1:  ", response);
+                     idUser = response.user.id;
+                     emailUser = response.user.email;
+                     role = response.user.role
+                    desplay(id);
+
+                },
+                error: function (xhr, status, error) {
+                    // Handle error case
+                    console.log(error);
+                }
+            });
+        });
+
+        function desplay(id) {
+            $('#comments-container').empty();
+            $.ajax({
+                url: 'http://localhost:3000/api/comments/byArticle/' + id, // Replace with the appropriate URL to fetch the comments data
+                method: 'GET',
+                success: function (response) {
+                    // Handle the API response
+                    let idButton = 0;
+                    if (response.length == 0) {
+                        $('#message2').text("No comments ");
+                    }
+                    else
+                        response.forEach(function (comment) {
+                            var commentDiv = $('<div>').addClass('comment');
+                            commentDiv.append($('<div>').addClass('email').text('Email: ' + comment.email));
+                            commentDiv.append($('<div>').addClass('content').text('Content: ' + comment.contenu));
+                            if (emailUser == comment.email || role == 'ADMIN') {
+                                const deletee = '<button class="btn btn-primary space1" onclick=deletecomment(' + comment.id + ')>delete</button>';
+                                commentDiv.append(deletee);
+                            }
+
+                            $('#comments-container').append(commentDiv);
+
+                        
+                            idButton++;
+                        });
+                    var addComments = $('<button>').text('Add Comment').addClass('btn btn-secondary ').attr("id", "addComment");
+
+                    $('#message').append(addComments);
+
+                    $('#addComment').click(() => {
+                        window.location.href = '/addComment?idArticle=' + id;
+
+                    })
+                },
+                error: function (xhr, status, error) {
+                    // Handle error case
+                    console.log(error);
+                }
+            });
+        }
+        function deletecomment(idc) {
+            var result = confirm('Are you sure you want to delete?');
+            if (result) {
+                $.ajax({
+                    url: 'http://localhost:3000/api/comments/' + idc,
+                    method: 'DELETE',
+                    success: function (res) {
+                       /// desplay(id);
+                       window.location.reload();
+                    }
+                });
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+    <div class="message" id="message">
+        <h1 class="element" id="message2">Comments </h1>
+    </div>
+
+    <div id="comments-container"></div>
+
+</body>
+
+</html>

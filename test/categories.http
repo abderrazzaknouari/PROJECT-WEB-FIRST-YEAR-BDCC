@@ -1,0 +1,32 @@
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+
+{
+  "nom": "moiii"
+}
+###
+POST http://localhost:3000/api/article/byCategory/strictmode
+Content-Type: application/json
+
+{
+  "categoryIds": [11,13]
+}
+###
+
+GET http://localhost:3000/api/categories
+###
+
+GET http://localhost:3000/api/categories/5
+
+###
+
+PATCH http://localhost:3000/api/categories/5
+Content-Type: application/json
+
+{
+  "nom": "Updated Category"
+}
+
+###
+
+DELETE http://localhost:3000/api/categories/263

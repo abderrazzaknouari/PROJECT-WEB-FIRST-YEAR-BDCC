@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>User Profile</title>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonwebtoken/8.5.1/jsonwebtoken.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    #user-profile {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    p {
+      margin-bottom: 10px;
+    }
+
+    strong {
+      font-weight: bold;
+    }
+
+    span {
+      color: #333;
+    }
+
+    .edit-button {
+      margin-left: 10px;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #3498db;
+      color: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="user-profile">
+    <h2>User Profile</h2>
+    <p><strong>Name:</strong> <span id="name"></span> <button class="edit-button" id="editNameButton">Edit</button></p>
+    <p><strong>Email:</strong> <span id="email"></span> <button class="edit-button" id="editEmailButton">Edit</button>
+    </p>
+    <p><strong>Role:</strong> <span id="role"></span> </p>
+  </div>
+
+
+
+
+  <script>
+
+    $(document).ready(function () {
+      let id;
+
+      $.ajax({
+        url: 'http://localhost:3000/api/profil', // Replace with the actual URL and user ID
+        method: 'GET',
+        success: function (response) {
+          // Update the HTML elements with user data
+          id = response.user.id;
+          $.ajax({
+            url: 'http://localhost:3000/api/users/' + id,
+            method: 'GET',
+            success: function (response) {
+              $('#name').text(response.nom);
+              $('#email').text(response.email);
+              $('#role').text(response.role);
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              //$('#content').text(errorThrown);
+            }
+          });
+
+        },
+        error: function (xhr, status, error) {
+          console.error(error);
+        }
+      });
+
+      // Function to handle editing the name
+      $('#editNameButton').click(function () {
+        var newName = prompt('Enter a new name:');
+        if (newName !== null && newName !== '') {
+          updateProfile('name', newName);
+        }
+      });
+
+      // Function to handle editing the email
+      $('#editEmailButton').click(function () {
+        var newEmail = prompt('Enter a new email:');
+
+        while (!isValidEmail(newEmail) && (newEmail !== null && newEmail !== '')) {
+          alert('Please enter a valid email');
+          newEmail = prompt('Enter a new email:');
+        }
+        if (newEmail !== null && newEmail !== '') {
+          updateProfile('email', newEmail);
+
+        }
+      });
+
+      // Function to handle editing the role
+
+
+      function updateProfile(field, value) {
+        $('#' + field + '').text(value);
+        profileData = {
+          nom: $('#name').text(),
+          email: $('#email').text(),
+          role: $('#role').text(),
+          //password:password
+        };
+
+
+
+
+        console.log(profileData);
+
+
+        $.ajax({
+          url: 'http://localhost:3000/api/users/' + id, // Replace with the actual URL and user ID
+          method: 'PATCH',
+          data: profileData,
+          success: function (response) {
+
+            $.ajax({
+              url: 'http://localhost:3000/api/users/' + id,
+              method: 'GET',
+              success: function (response) {
+                $('#name').text(response.nom);
+                $('#email').text(response.email);
+                $('#role').text(response.role);
+
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                //$('#content').text(errorThrown);
+              }
+            });
+          },
+          error: function (xhr, status, error) {
+            // Handle error response
+            console.error(error);
+            alert('An error occurred while updating the profile.');
+          }
+        });
+      }
+    });
+    function isValidEmail(email) {
+      // Regular expression pattern to validate email format
+      var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailPattern.test(email);
+    }
+  </script>
+
+</body>
+
+</html>

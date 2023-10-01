@@ -1,0 +1,33 @@
+### GET /api/users - Retrieve all users ###
+GET http://localhost:3000/api/users
+
+### GET /api/users/{id} - Retrieve a user by ID ###
+GET http://localhost:3000/api/users/1
+
+### POST /api/users - Create a new user ###
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+    
+  "nom": "John Doe",
+  "email": "jolljjytyyhhn@sssexample.com",
+  "password": "password123",
+  "role": "AUTHOR"
+}
+
+
+
+### PATCH /api/users/{id} - Update a user by ID ###
+PATCH http://localhost:3000/api/users/23
+Content-Type: application/json
+
+{
+  "nom": "Updalkted Name",
+  "email": "updated@example.com",
+  "password": "updatedpassword",
+  "role": "ADMIN"
+}
+
+### DELETE /api/users/{id} - Delete a user by ID ###
+DELETE http://localhost:3000/api/users/72

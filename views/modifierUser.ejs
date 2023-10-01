@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add User</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 10px;
+        }
+    </style>
+
+
+
+    
+</head>
+
+<body>
+    <h1>Modifier User</h1>
+    <form id="userForm">
+        <label for="userName">Name:</label>
+        <input type="text" id="userName" name="userName" required>
+
+        <label for="userEmail">Email:</label>
+        <input type="email" id="userEmail" name="userEmail" required>
+
+        <label for="userPassword">Password:</label>
+        <input type="password" id="userPassword" name="userPassword">
+
+        <label for="userRole">Role:</label>
+        <select id="userRole" name="userRole">
+            <option value="ADMIN">Admin</option>
+            <option value="AUTHOR">Author</option>
+        </select>
+
+        <button type="submit">Modifier User</button>
+    </form>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var urlParams = new URLSearchParams(window.location.search);
+            var idUser = urlParams.get('id');
+            $.ajax({
+                url: 'http://localhost:3000/api/users/' + idUser,
+                method: 'GET',
+                success: function (response) {
+                    $('#userName').val(response.nom);
+                    $('#userEmail').val(response.email);
+                    $('#userPassword').attr("placeholder", 'if you want you can change the password').val("");
+                    $('#userRole').val(response.role);
+                 },
+                 error: function (jqXHR, textStatus, errorThrown){
+                    //$('#content').text(errorThrown);
+                 }
+            });
+            $('#userForm').submit(function (event) {
+                event.preventDefault();
+
+                var userName = $('#userName').val();
+                var userEmail = $('#userEmail').val();
+                var userPassword = $('#userPassword').val();
+                var userRole = $('#userRole').val();
+
+                $.ajax({
+                    url: 'http://localhost:3000/api/users/'+idUser, // Replace with your API endpoint
+                    method: 'PATCH',
+                    dataType: 'json',
+                    data: {
+                        nom: userName,
+                        email: userEmail,
+                        password: userPassword,
+                        role: userRole
+                    },
+                    success: function (response) {
+                        alert('User modified successfully');
+                        window.location.href = '/allUsers';
+                       
+                    },
+                    error: function (error) {
+                        console.log('error',error);
+                        // Handle error response here
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

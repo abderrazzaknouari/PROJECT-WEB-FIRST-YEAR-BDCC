@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>User List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-buttons button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-button {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+
+        .edit-button {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .delete-button:hover,
+        .edit-button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+       
+        $(document).ready(function () {
+            displayUsers();
+        });
+
+
+        function deleteUser(userId) {
+           
+            
+                $.ajax({
+                    url: 'http://localhost:3000/api/users/' + userId, // Replace with the actual URL to fetch data from
+                    method: 'Delete',
+                    success: function (response) {
+                        displayUsers();
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            
+
+        }
+        function editUser(userId) {
+            window.location.href = '/modifierUser?id=' + userId;
+        }
+        function displayUsers() {
+            $("#user-list").empty();
+            $.ajax({
+                url: "http://localhost:3000/api/users",
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    users = response;
+                    
+                    var userTable = "<table>";
+                    userTable += "<tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr>";
+
+                    for (var i = 0; i < users.length; i++) {
+                        var user = users[i];
+                        userTable += "<tr>";
+                        userTable += "<td>" + user.id + "</td>";
+                        userTable += "<td>" + user.nom + "</td>";
+                        userTable += "<td>" + user.email + "</td>";
+                        userTable += "<td>" + user.role + "</td>";
+                        userTable += "<td class='action-buttons'>";
+                        userTable += "<button class='delete-button' onclick='deleteUser(" + user.id + ")'>Delete</button>";
+                        userTable += "<button class='edit-button' onclick='editUser(" + user.id + ")'>Edit</button>";
+                        userTable += "</td>";
+                        userTable += "</tr>";
+                    }
+
+                    userTable += "</table>";
+                    $("#user-list").html(userTable);
+
+
+                    $(".delete-button").click(function () {
+                        var userId = $(this).closest("tr").find("td:first-child").text();
+                        var result = confirm('Are you sure you want to delete?');
+                        if(result)
+                        deleteUser(userId);
+                    });
+
+                    $(".edit-button").click(function () {
+                        var userId = $(this).closest("tr").find("td:first-child").text();
+                        editUser(userId);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error fetching users: " + error);
+                }
+            });
+
+        }
+
+    </script>
+</head>
+
+<body>
+    <h1>User List</h1>
+    <div id="user-list"></div>
+</body>
+
+</html>

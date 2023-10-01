@@ -1,0 +1,30 @@
+POST http://localhost:3000/api/article/
+Content-Type: application/json
+
+{
+    
+  "titre": "Sample Article",
+  "contenu": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  "image": "https://example.com/image.jpg",
+  "published": true,
+  "userId": 290
+}
+
+
+###
+GET http://localhost:3000/api/article/
+###
+PATCH  http://localhost:3000/api/article/96
+Content-Type: application/json
+
+
+{
+    "titre": "Sample Article",
+   "contenu": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "image": "https://example.com/image.jpg",
+  "published": true,
+  "userId": 10
+}
+
+###
+DELETE http://localhost:3000/api/article/731

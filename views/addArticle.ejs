@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        #options {
+            width: 200px;
+            height: 150px;
+        }
+
+        #options option[selected] {
+            background-color: #ddd;
+        }
+
+        #selectedOptions {
+            display: inline-block;
+            border: 1px solid #ccc;
+            padding: 5px;
+            cursor: text;
+        }
+
+        .margin-top {
+            margin-left: 200px;
+        }
+
+        .select {
+            display: block;
+            font-size: 20px;
+            color: rgb(57, 54, 54);
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Add Article</h1>
+
+    <form id="article-form" action="" method="post" enctype="multipart/form-data">
+        <label for="title">Title:</label>
+        <input type="text" id="titre" name="titre" required>
+
+        <label for="content">Content:</label>
+        <textarea id="contenu" name="contenu" required></textarea>
+
+        <label for="image">Image :</label>
+        <input id="image"type="file" name="image" />
+
+        <label for="content">categories:</label>
+        <select id="options" class="select" multiple required>
+            <option selected>Open this select menu</option>
+        </select>
+
+        <input type="hidden" id="userId" name="userId" value="123">
+        <button type="submit" class="margin-top">Add Article</button>
+    </form>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            const form = $('#article-form');
+
+            $.ajax({
+                url: 'http://localhost:3000/api/categories', // Replace with your data source URL
+                method: 'GET',
+                dataType: 'json', // Adjust the data type based on your response
+                success: function (response) {
+
+                    var selectElement = $('#options');
+                    console.log(response);
+                    // Clear any existing options
+                    selectElement.empty();
+
+
+                    // Populate the select element with options
+                    response.forEach(option => {
+                        var o = $('<option>').val(option.id).text('-   ' + option.nom);
+                        selectElement.append(o);
+                    });
+
+
+
+                    $('#article-form').submit(function (event) {
+                        event.preventDefault();
+                        var selectedValue = $('#options').val();
+
+                        $.ajax({
+                            url: 'http://localhost:3000/api/profil',
+                            method: 'GET',
+                            dataType: 'json',
+
+                            success: function (response) {
+                                console.log("response1:  ", response);
+                                var idUser = parseInt( response.user.id);
+
+                                var titleValue = $('#titre').val();
+                                var contentValue = $('#contenu').val();
+                                var imageUrlValue = $('#image').val();
+        
+                                const formData = new FormData(form[0]);
+                                formData.append('userId', idUser);
+                               
+
+                                $.ajax({
+                                    url: 'http://localhost:3000/api/article/upload',
+                                    method: 'POST',
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (response) {
+                                        
+                                        console.log("response2:  ", response);
+                                        selectedValue.forEach(async (idCategorie) => {
+                                            var Data2 = JSON.stringify({
+                                                articleId: response.id,
+                                                categoryId: idCategorie
+
+                                            });
+                                            await $.ajax({
+                                                url: 'http://localhost:3000/api/CategoryToArticle/',
+                                                method: 'POST',
+                                                dataType: 'json',
+                                                data: Data2,
+                                                contentType: 'application/json',
+                                                success: function (response) {
+
+                                                },
+                                                error: function (error) {
+                                                    console.log('Error adding the relation betwen article and category:', error);
+                                                }
+                                            });
+                                        });
+
+                                        alert('Added successfully!');
+                                        location.reload();
+
+                                    },
+
+                                    error: function (xhr, status, error) {
+                                        console.log("error", error);
+                                    }
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(error);
+                            }
+                        });
+                    });
+
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX request failed:', error);
+                }
+            });
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>

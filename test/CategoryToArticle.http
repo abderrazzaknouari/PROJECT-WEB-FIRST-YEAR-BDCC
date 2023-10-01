@@ -1,0 +1,7 @@
+POST http://localhost:3000/api/CategoryToArticle/
+Content-Type: application/json
+
+{
+  "articleId": 810,
+  "categoryId": 293
+}

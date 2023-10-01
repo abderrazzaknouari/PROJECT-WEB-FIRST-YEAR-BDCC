@@ -1,0 +1,25 @@
+### GET /api/comments - Retrieve all comments ###
+GET http://localhost:3000/api/comments
+
+### POST /api/comments - Create a new comment ###
+POST http://localhost:3000/api/comments
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "contenu": "This is a comment.",
+  "articleId": 835
+}
+
+### PATCH /api/comments/{id} - Update an existing comment by ID ###
+PATCH http://localhost:3000/api/comments/10
+Content-Type: application/json
+
+{
+  "email": "updateduser@example.com",
+  "contenu": "Updated comment."
+ 
+}
+
+### DELETE /api/comments/{id} - Delete an existing comment by ID ###
+DELETE http://localhost:3000/api/comments/7055

@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Home Page</title>
+  <style>
+    .card {
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #fff;
+      width: calc(33.33% - 20px);
+      box-sizing: border-box;
+      display: inline-block;
+      vertical-align: top;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+
+    .card h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      margin-bottom: 10px;
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .categories {
+      margin-top: 10px;
+    }
+
+    .categories::before {
+      content: "Categories: ";
+      font-weight: bold;
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+    .category {
+      display: inline-block;
+      margin-right: 5px;
+      padding: 5px 10px;
+      background-color: #f2f2f2;
+      color: #333;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    .category:last-child {
+      margin-right: 0;
+    }
+
+    .btn {
+      /* Common button styles */
+      display: inline-block;
+      padding: 0.5em 1em;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .btn-primary {
+      /* Primary button styles */
+      background-color: #869eb7;
+    }
+
+    /* Additional styles for hover and focus states */
+    .btn:hover {
+      opacity: 0.5;
+    }
+
+    .btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #007bff;
+    }
+
+    .space {
+      margin-left: 7px;
+    }
+
+    .dropdown {
+      position: relative;
+      /* left: 30%; */
+
+      margin-left: 60px;
+      display: inline-block;
+      background-color: #869eb7;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .dropdown-toggle {
+      background-color: #869eb7;
+      border: 1px solid #ccc;
+      color: #fff;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      background-color: #869eb7;
+      border: 1px solid #ccc;
+      border-top: none;
+      top: 100%;
+      left: 0;
+      padding: 10px 0;
+      z-index: 1;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 1, 1);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 20px;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+
+    .categories {
+      margin-bottom: 5px;
+    }
+
+    .categories::before {
+      content: "Categories: ";
+      font-weight: bold;
+      display: inline-block;
+      margin-right: 5px;
+
+    }
+
+    .category {
+      display: inline-block;
+      margin-top: 4px;
+      font-weight: bold;
+      margin-right: 5px;
+      padding: 5px 10px;
+      background-color: #f2f2f2;
+      color: #2c09ab;
+      border-radius: 20px;
+      font-size: 20px;
+    }
+
+    .category:last-child {
+      margin-right: 0;
+    }
+
+    .spam {
+      font-weight: bold;
+    }
+
+    .search-button {
+      display: inline-block;
+      padding: 7px 19px;
+      background-color: #869eb7;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .search-button:hover {
+      background-color: #103662;
+    }
+
+    .search-button:focus {
+      outline: none;
+    }
+
+    .search-button:active {
+      background-color: #507ba1;
+    }
+
+    #searchInput {
+      /* position: absolute;
+      left: 75%; */
+      margin-left: 10px;
+      width: 250px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .categorie-search {
+      display: flex;
+      align-items: center;
+
+      margin: 0;
+      margin-bottom: 20px;
+      background-color: #507ba1;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .space2 {
+      /*  position: absolute;
+      left: 20%; */
+      margin-left: 20px;
+    }
+
+    .space1 {
+      margin-left: 10px;
+    }
+
+    .selected-option {
+
+      text-align: end;
+    }
+
+    .hasBenSearched {
+      background-color: green;
+      color: #f2f2f2;
+    }
+
+    .buttonCategories {
+      display: inline-block;
+      margin-left: 15px;
+      padding: 10px 19px;
+      background-color: gray;
+      color: #fff;
+      border: none;
+      font-weight: bold;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0px 0px 10px rgba(1.5, 1.5, 1.5, 1.5);
+    }
+
+    .categories1 {
+      display: inline-block;
+      align-items: center;
+    }
+
+    .highlight {
+      background-color: yellow
+    }
+  </style>
+</head>
+
+<body>
+  <div class="categorie-search">
+    <div class="dropdown space1">
+      <button class="dropdown-toggle ">Category</button>
+      <div class="dropdown-menu" id="dropdown-menu">
+      </div>
+    </div>
+    <input type="text" id="searchInput" placeholder="Search by article title">
+    <button id="search-strict" class="search-button space1"></button>
+    <button id="search" class="search-button space1">Filter</button>
+  </div>
+  <div>
+    <h1 class="categories1"> <span id="whatToSay">All Categories</span><span id="categories"></span>
+    </h1>
+  </div>
+
+  <div id="posts-container" class="posts-container"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    let role;
+    let emailUser;
+    let idprofile;
+    var postsContainer = $('#posts-container');
+    $(document).ready(function () {
+      $('#supression').hide();
+      $('#search-strict').hide();
+
+      var commentsContainer = $('#comments-container');
+      $.ajax({
+        url: 'http://localhost:3000/api/categories', // Replace with your data source URL
+        method: 'GET',
+        dataType: 'json', // Adjust the data type based on your response
+        success: function (response) {
+          var selectElement = $('#dropdown-menu');
+
+          // Clear any existing options
+          selectElement.empty();
+
+
+          // Populate the select element with options
+          response.forEach(option => {
+            var o = $('<a>').val(option.id).text(option.nom);
+            selectElement.append(o);
+          });
+          //handlingDropdown
+          var dropdownToggle = document.querySelector('.dropdown-toggle');
+          var dropdownMenu = document.querySelector('.dropdown-menu');
+          var dropdownOptions = document.querySelectorAll('.dropdown-menu a');
+          var selectedOptions = [];
+          $('#categories').click(function () {
+            $('.selected-option').removeClass('selected-option');
+            $('.dropdown-toggle').empty().text('Category ');
+            $('#categories').empty();
+            $('#search-strict').hide();
+            $('#whatToSay').text('All Categories');
+            selectedOptions = [];
+            dropdownMenuClick(dropdownOptions, selectedOptions, dropdownToggle);
+          });
+
+          dropdownMenuClick(dropdownOptions, selectedOptions, dropdownToggle);
+          dropdownToggle.addEventListener('click', function () {
+
+            dropdownToggle.classList.remove('selected-option');
+
+          });
+
+          $.ajax({
+            url: 'http://localhost:3000/api/profil',
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+              idprofile = response.user.id;
+              emailUser = response.user.email;
+              role = response.user.role
+              const url = 'http://localhost:3000/api/article/';
+              fetchArticleByCategory(url, idprofile, role, postsContainer);
+              $("#search").on('click', () => {
+                postsContainer.empty();
+                if (selectedOptions.length == 0) {
+                  const url = 'http://localhost:3000/api/article';
+                  fetchArticleByCategory(url, idprofile, role, postsContainer);
+                }
+                else {
+                  if (selectedOptions.length == 1)
+                    selectedOptions.forEach(function (option) {
+                      const url = 'http://localhost:3000/api/article/byCategory/' + option.value;
+                      fetchArticleByCategory(url, idprofile, role, postsContainer);
+                    })
+                  else {
+                    const url = 'http://localhost:3000/api/article/byCategory';
+                    fetchArticleByCategory2(url, idprofile, role, postsContainer, selectedOptions);
+                  }
+                }
+              });
+
+              $("#search-strict").on('click', () => {
+                postsContainer.empty();
+                const url = 'http://localhost:3000/api/article/byCategory/strictmode';
+                fetchArticleByCategory2(url, idprofile, role, postsContainer, selectedOptions);
+              });
+
+              /////////////////////////////////////////////////////////////
+              $('#searchInput').on('input', function () {
+                var searchQuery = $('#searchInput').val().trim();
+                console.log("search=", searchQuery);
+
+                // Send an AJAX request to the server
+                $.ajax({
+                  url: 'http://localhost:3000/api/article/search', // Replace with your server-side endpoint URL
+                  method: 'POST',
+                  data: { query: searchQuery },
+                  dataType: 'json',
+                  success: function (response) {
+                    postsContainer.empty();
+                    let idButton = 0;
+
+
+                    response.forEach(function (post) {
+
+                      // Create a card element for each post
+                      var card = $('<div>').addClass('card');
+                      var cardTitle = $('<h2>').html(post.titre.replace(new RegExp(searchQuery, 'gi'), '<span class="highlight">$&</span>'));
+                      var cardContent = $('<p>').text(post.contenu);
+                      var cardImage = $('<img>').attr('src', './images/' + post.image);
+                      var cardCreatedAt = $('<p>').append('<spam class="spam">Created at: </spam>' + post.createdAt);
+                      var cardUpdatedAt = $('<p>').append('<spam class="spam">Last update :</spam> ' + post.updatedAt);
+                      var cardcategory = $('<div>').addClass('categories');
+
+                      post.articleCategories.forEach((x) => {
+                        /*  const p = $('<button>').addClass('category').append(x.category.nom);
+                         cardcategory.append(p); */
+                        let p;
+                        if (post.SearchcategoryId == x.category.id) p = $('<button>').addClass('category hasBenSearched').append(x.category.nom);
+                        else p = $('<button>').addClass('category').append(x.category.nom);
+                        cardcategory.append(p);
+                      })
+                      var Comments = $('<button>').text(post.commentCount + ' Comments').addClass('btn btn-primary').attr("id", "comments" + idButton);
+                      let edit; if (idprofile == post.userId || role == 'ADMIN') edit = $('<button>').text('Edit').addClass('btn btn-primary space').attr("id", "edit" + idButton);
+
+
+                      // Append the card elements to the container
+                      card.append(cardTitle, cardContent, cardImage, cardCreatedAt, cardUpdatedAt, cardcategory, Comments, edit);
+                      if (idprofile == post.userId || role == 'ADMIN') {
+                        const deletee = '<button class="btn btn-primary space1" onclick=deletearticle(' + post.id + ')>delete</button>';
+                        card.append(deletee);
+                      }
+
+
+                      postsContainer.append(card);
+
+
+                      $('#comments' + idButton).click(() => {
+                        window.location.href = '/comments?idArticle=' + post.id;
+                      })
+                      if (idprofile == post.userId || role == 'ADMIN') $('#edit' + idButton).click(() => {
+                        window.location.href = '/modifierArticle?idArticle=' + post.id;
+                      })
+
+                      idButton++;
+
+                    });
+
+                  },
+                  error: function (xhr, status, error) {
+                    console.log('An error occurred:', error);
+                  }
+                });
+              });
+
+              ////////////////////////////////////////////////////////////////////////////
+            },
+            error: function (error) {
+              console.log('Error fetching posts:', error);
+            }
+          });
+        },
+        error: function (error) {
+          console.log('Error fetching posts:', error);
+        }
+      });
+    });
+
+
+
+
+
+
+
+
+
+
+    //function for fetching
+    function fetchArticleByCategory(url, idprofile, role, postsContainer) {
+      postsContainer.empty();
+      $.ajax({
+        url: url,
+        method: 'GET',
+        success: function (response) {
+          // Handle the API response
+          console.log("url", url);
+          let idButton = 0;
+
+
+          response.forEach(function (post) {
+
+            // Create a card element for each post
+            var card = $('<div>').addClass('card');
+            var cardTitle = $('<h2>').text(post.titre);
+            var cardContent = $('<p>').text(post.contenu);
+            var cardImage = $('<img>').attr('src', './images/' + post.image);
+            var cardCreatedAt = $('<p>').append('<spam class="spam">Created at: </spam>' + post.createdAt);
+            var cardUpdatedAt = $('<p>').append('<spam class="spam">Last update :</spam> ' + post.updatedAt);
+            var cardcategory = $('<div>').addClass('categories');
+
+            post.articleCategories.forEach((x) => {
+              /*  const p = $('<button>').addClass('category').append(x.category.nom);
+               cardcategory.append(p); */
+              let p;
+              if (post.SearchcategoryId == x.category.id) p = $('<button>').addClass('category hasBenSearched').append(x.category.nom);
+              else p = $('<button>').addClass('category').append(x.category.nom);
+              cardcategory.append(p);
+            })
+            var Comments = $('<button>').text(post.commentCount + ' Comments').addClass('btn btn-primary').attr("id", "comments" + idButton);
+            let edit; if (idprofile == post.userId || role == 'ADMIN') edit = $('<button>').text('Edit').addClass('btn btn-primary space').attr("id", "edit" + idButton);
+            // Append the card elements to the container
+            card.append(cardTitle, cardContent, cardImage, cardCreatedAt, cardUpdatedAt, cardcategory, Comments, edit);
+            if (idprofile == post.userId || role == 'ADMIN') {
+              const deletee = '<button class="btn btn-primary space1" onclick=deletearticle(' + post.id + ')>delete</button>';
+              card.append(deletee);
+            }
+
+
+            postsContainer.append(card);
+
+
+            $('#comments' + idButton).click(() => {
+              window.location.href = '/comments?idArticle=' + post.id;
+            })
+            if (idprofile == post.userId || role == 'ADMIN') $('#edit' + idButton).click(() => {
+              window.location.href = '/modifierArticle?idArticle=' + post.id;
+            })
+
+            idButton++;
+
+
+          });
+        },
+        error: function (error) {
+          console.log('Error fetching posts:', error);
+        }
+
+      });
+    }
+
+
+    function fetchArticleByCategory2(url, idprofile, role, postsContainer, selectedOptions) {
+      let array1 = [];
+      selectedOptions.forEach(function (option) {
+        array1.push(option.value);
+      });
+
+      data = {
+        categoryIds: array1,
+      }; console.log(data);
+      $.ajax({
+        url: url,
+        method: 'POST',
+        data: data,
+        success: function (response) {
+          // Handle the API response
+          console.log("url", response[0].articleCategories);
+          let idButton = 0;
+
+
+          response.forEach(function (post) {
+
+            // Create a card element for each post
+            var card = $('<div>').addClass('card');
+            var cardTitle = $('<h2>').text(post.titre);
+            var cardContent = $('<p>').text(post.contenu);
+            var cardImage = $('<img>').attr('src', './images/' + post.image);
+            var cardCreatedAt = $('<p>').append('<spam class="spam">Created at: </spam>' + post.createdAt);
+            var cardUpdatedAt = $('<p>').append('<spam class="spam">Last update :</spam> ' + post.updatedAt);
+            var cardcategory = $('<div>').addClass('categories');
+
+            post.articleCategories.forEach((x) => {
+              let p;
+              if (post.SearchcategoryIds.includes(x.category.id)) p = $('<button>').addClass('category hasBenSearched').append(x.category.nom);
+              else p = $('<button>').addClass('category').append(x.category.nom);
+              cardcategory.append(p);
+            })
+            var Comments = $('<button>').text(post.commentCount + ' Comments').addClass('btn btn-primary').attr("id", "comments" + idButton);
+            let edit; if (idprofile == post.userId || role == 'ADMIN') edit = $('<button>').text('Edit').addClass('btn btn-primary space').attr("id", "edit" + idButton);
+
+            // Append the card elements to the container
+            card.append(cardTitle, cardContent, cardImage, cardCreatedAt, cardUpdatedAt, cardcategory, Comments, edit);
+            if (idprofile == post.userId || role == 'ADMIN') {
+              const deletee = '<button class="btn btn-primary space1" onclick=deletearticle(' + post.id + ')>delete</button>';
+              card.append(deletee);
+            }
+
+
+            postsContainer.append(card);
+
+
+            $('#comments' + idButton).click(() => {
+              window.location.href = '/comments?idArticle=' + post.id;
+            })
+            if (idprofile == post.userId || role == 'ADMIN') $('#edit' + idButton).click(() => {
+              window.location.href = '/modifierArticle?idArticle=' + post.id;
+            })
+
+            idButton++;
+
+
+          });
+        },
+        error: function (error) {
+          console.log('Error fetching posts:', error);
+        }
+
+      });
+    }
+
+
+
+
+    function updateSelectedText(selectedOptions, dropdownToggle) {
+      if (selectedOptions.length > 0) {
+        $('#categories').empty();
+        $('#supression').show();
+        $('#whatToSay').text('Selected categories :')
+
+        selectedOptions.forEach(function (option) {
+          const button = $('<button>').addClass('buttonCategories').text("" + option.textContent + "");
+          $('#categories').append(button);
+
+
+        });
+        //dropdownToggle.textContent = 'Category :' + selectedText;
+
+        dropdownToggle.classList.add('selected-option');
+        selectedOptions.forEach(function (option) {
+
+        });
+
+      } else {
+        $('#whatToSay').text('All Categories');
+        dropdownToggle.textContent = 'Category';
+        dropdownToggle.classList.remove('selected-option');
+        selectedOptions.value = 0;
+      }
+      if (selectedOptions.length > 1) {
+        $('#search-strict').text('Strict Filter').show();
+        $('#search').text('Normal Filter');
+      }
+      if (selectedOptions.length < 2) {
+        $('#search-strict').hide();
+        $('#search').text('Filter');
+      }
+    }
+
+
+    function dropdownMenuClick(dropdownOptions, selectedOptions, dropdownToggle) {
+      dropdownOptions.forEach(function (option) {
+        option.addEventListener('click', function (event) {
+          event.preventDefault();
+
+          var clickedOption = event.target;
+          var optionIndex = selectedOptions.indexOf(clickedOption);
+
+          if (optionIndex === -1) {
+            selectedOptions.push(clickedOption);
+            clickedOption.classList.add('selected-option');
+          } else {
+            selectedOptions.splice(optionIndex, 1);
+            clickedOption.classList.remove('selected-option');
+          }
+          updateSelectedText(selectedOptions, dropdownToggle);
+        });
+      })
+    }
+    function deletearticle(id) {
+      var result = confirm('Are you sure you want to delete?');
+      if (result) {
+        $.ajax({
+          url: 'http://localhost:3000/api/article/' + id,
+          method: 'DELETE',
+          success: function (response) {
+            const url = 'http://localhost:3000/api/article/';
+            fetchArticleByCategory(url, idprofile, role, postsContainer);
+          },
+          error: function (error) {
+            console.log("errorrrr", error);
+          }
+        });
+      }
+    }
+  </script>
+</body>
+
+</html>

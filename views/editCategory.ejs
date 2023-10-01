@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Category</title>
+    <style>
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .update-button {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .update-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var categoryId = getUrlParameter('id');
+
+            // Fetch category data by ID and populate the form
+            $.ajax({
+                url: 'http://localhost:3000/api/categories/' + categoryId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (category) {
+                    $('#categoryName').val(category.nom);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+
+            // Update category data
+            $('#updateCategoryForm').submit(function (event) {
+                event.preventDefault();
+
+                var newName = $('#categoryName').val();
+
+                var categoryData = {
+                    nom: newName
+                };
+
+                $.ajax({
+                    url: 'http://localhost:3000/api/categories/' + categoryId,
+                    type: 'PATCH',
+                    dataType: 'json',
+                    data: categoryData,
+                    success: function (response) {
+                        alert('Category updated successfully!');
+                        window.location.href = '/allCategories'; // Redirect to category list page
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            // Function to extract URL parameters
+            function getUrlParameter(name) {
+                var url = window.location.search.substring(1);
+                var params = url.split('&');
+                for (var i = 0; i < params.length; i++) {
+                    var param = params[i].split('=');
+                    if (param[0] === name) {
+                        return param[1] === undefined ? true : decodeURIComponent(param[1]);
+                    }
+                }
+                return null;
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Edit Category</h1>
+    <form id="updateCategoryForm">
+        <div class="form-group">
+            <label for="categoryName">Category Name:</label>
+            <input type="text" id="categoryName" name="categoryName" required>
+        </div>
+        <button class="update-button" type="submit">Update</button>
+    </form>
+</body>
+
+</html>
