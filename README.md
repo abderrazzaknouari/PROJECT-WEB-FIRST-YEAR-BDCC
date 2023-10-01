@@ -5,6 +5,10 @@ npm install
 
 npm run dev
 
-create folder public 
+run npx prisma migrate dev --name initial
 
-create folder images inside the public folder to store the images of articles automatically
+run cd seeds
+
+run node seed.js //to initialize the dabase
+
+the name of the datase is "test0" it will be created when run the 3 command if you wand to change the name go to .env file
